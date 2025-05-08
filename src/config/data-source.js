@@ -26,6 +26,8 @@ const AppDataSource = new DataSource({
   logging: true,              // log SQL queries to console
   entities: [
     /* we’ll add our entity schemas here soon */
+    require('../entities/User'),
+    require('../entities/Book')
   ],
 });
 

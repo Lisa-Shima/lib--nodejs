@@ -18,7 +18,7 @@ async function createBook(req, res, next){
     try{
         // const book = await BOOK_REPO.create(req.body)
         const { title, author } = req.body
-        if(!title || !author) return res.status(404).json({message: 'Both title and author are required'})
+        if(!title || !author) return res.status(400).json({message: 'Both title and author are required'})
             const book = BOOK_REPO.create({title, author})
         const result = await BOOK_REPO.save(book)
         res.status(201).json(result)
@@ -28,7 +28,41 @@ async function createBook(req, res, next){
     }
 }
 
+// updating a book
+async function updateBook(req, res, next){
+    try{
+        const bookId = parseInt(req.params.id)
+        const { author, title } = req.body
+        if(!author || !title) return res.status(400).json({message: 'Both title and author are required'})
+            const book = await BOOK_REPO.findOneBy({id: bookId})
+        if(!book) return res.status(404).json({message: 'Book not found'})
+            book.author = author
+            book.title = title
+        const updated = await BOOK_REPO.save(book)
+        res.status(200).json(updated)
+    }
+    catch(e){
+        next(e)
+    }
+}
+
+// deleting a book
+async function deleteBook(req, res, next){
+    try{
+        const bookId = parseInt(req.params.id)
+        const result = await BOOK_REPO.delete({id: bookId})
+
+        if(result.affected === 0) return res.status(404).json({message: 'Book not found'})
+            res.status(200).json({message: 'Book deleted successfully'})
+    }
+    catch(e){
+        next(e)
+    }
+}
+
 module.exports = {
     getAllBooks,
-    createBook
+    createBook,
+    updateBook,
+    deleteBook
 }

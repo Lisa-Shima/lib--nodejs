@@ -6,6 +6,7 @@ const AppDataSource = require('./config/data-source')
 const app = express()
 const bookRoutes = require('./routes/bookRoutes')
 const authRoutes = require('./routes/authRoutes')
+const authMiddleware = require('./middleware/authMiddleware')
 
 
 app.use(express.json())
@@ -14,7 +15,7 @@ app.get('/', (req, res) => {
     res.send("Hello World!")
 })
 
-app.use('/api/books', bookRoutes)
+app.use('/api/books', authMiddleware, bookRoutes)
 app.use('/api/auth', authRoutes)
 
 async function bootstrap(){

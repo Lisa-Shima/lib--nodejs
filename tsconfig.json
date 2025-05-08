@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "target": "ES2017",                      // Emit JS that runs on Node v10+.
+      "module": "commonjs",                    // Use CommonJS module system (what Node uses).
+      "strict": true,                          // Enable all strict type-checking options.
+      "esModuleInterop": true,                 // Allow `import express from "express"` vs. require.
+      "skipLibCheck": true,                    // Don’t type-check dependencies’ .d.ts files.
+      "forceConsistentCasingInFileNames": true,// Ensures consistent file name casing in imports.
+      "experimentalDecorators": true,          // Turn on support for decorators (needed by TypeORM).
+      "emitDecoratorMetadata": true,           // Emit metadata for decorators (needed by TypeORM).
+      "outDir": "dist"                         // Where compiled .js files go (if you ever compile).
+    },
+    "include": ["src"]                         // Only compile TS files in src/
+  }
+  

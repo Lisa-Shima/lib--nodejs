@@ -5,6 +5,7 @@ const express = require('express')
 const AppDataSource = require('./config/data-source')
 const app = express()
 const bookRoutes = require('./routes/bookRoutes')
+const authRoutes = require('./routes/authRoutes')
 
 
 app.use(express.json())
@@ -14,6 +15,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/books', bookRoutes)
+app.use('/api/auth', authRoutes)
 
 async function bootstrap(){
     try{

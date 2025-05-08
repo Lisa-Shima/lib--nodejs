@@ -4,6 +4,7 @@ require('reflect-metadata')
 const express = require('express')
 const AppDataSource = require('./config/data-source')
 const app = express()
+const bookRoutes = require('./routes/bookRoutes')
 
 
 app.use(express.json())
@@ -11,6 +12,8 @@ app.use(express.json())
 app.get('/', (req, res) => {
     res.send("Hello World!")
 })
+
+app.use('/api/books', bookRoutes)
 
 async function bootstrap(){
     try{

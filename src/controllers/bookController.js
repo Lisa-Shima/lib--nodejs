@@ -33,7 +33,7 @@ async function updateBook(req, res, next){
     try{
         const bookId = parseInt(req.params.id)
         const { author, title } = req.body
-        if(!author || !title) throw new ApiError.BadRequest('Both title and author are required')
+        if(!author || !title) throw ApiError.BadRequest('Both title and author are required')
             const book = await BOOK_REPO.findOneBy({id: bookId})
         if(!book) return res.status(404).json({message: 'Book not found'})
             book.author = author

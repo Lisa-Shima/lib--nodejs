@@ -8,9 +8,14 @@ const bookRoutes = require('./routes/bookRoutes')
 const authRoutes = require('./routes/authRoutes')
 const authMiddleware = require('./middleware/authMiddleware')
 const errorMiddleware = require('./middleware/errorMiddleware')
+const swaggerUi = require('swagger-ui-express')
+const swaggerSpec = require('./swagger')
 
 
 app.use(express.json())
+
+//  Server swagger apis
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 app.get('/', (req, res) => {
     res.send("Hello World!")

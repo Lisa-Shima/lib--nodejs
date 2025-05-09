@@ -10,6 +10,7 @@ function validate(req, res, next){
     if(!errors.isEmpty()){
         return next(ApiError.BadRequest('Validation failed,', errors.array()))
     }
+    next()
 }
 
 module.exports = validate

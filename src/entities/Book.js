@@ -28,5 +28,15 @@ module.exports = new EntitySchema({
             type: 'timestamp',
             updateDate: true
         }
+    },
+    relations: {
+        // Add a user relation: each book “belongs to” one user
+        user: {
+            type: 'many-to-one',
+            target: 'User', // the User entity
+            joinColumn: { name: 'userId'},
+            nullable: false, // every book must have an owner
+            onDELETE: 'CASCADE'  // if the user is deleted, their books are too
+        }
     }
 })

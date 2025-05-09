@@ -5,7 +5,8 @@ const BOOK_REPO = AppDataSource.getRepository('Book')
 // fetching all books
 async function getAllBooks(req, res, next){
     try{
-        const books = await BOOK_REPO.find()
+        // Fetch books where book.user.id === current user's id
+        const books = await BOOK_REPO.find({ where: { user: {id: req.user.id}}, order: { createdAt: 'DESC'}})
         res.status(200).json(books)
     }
     catch(e){
@@ -19,7 +20,7 @@ async function createBook(req, res, next){
         // const book = await BOOK_REPO.create(req.body)
         const { title, author } = req.body
         if(!title || !author) throw ApiError.BadRequest('Both title and author are required')
-            const book = BOOK_REPO.create({title, author})
+            const book = BOOK_REPO.create({title, author, user: {id: req.user.id}})
         const result = await BOOK_REPO.save(book)
         res.status(201).json(result)
     }

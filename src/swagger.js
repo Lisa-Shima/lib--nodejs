@@ -48,7 +48,18 @@ const swaggerDefinition = {
                 properties: {
                     token: { type: 'string' }
                 }
-            }
+            },
+            Book: {
+                type: 'object',
+                properties: {
+                    id:        { type: 'integer' },
+                    title:     { type: 'string' },
+                    author:    { type: 'string' },
+                    userId:    { type: 'integer', description: "ID of the user who created this book" },
+                    createdAt: { type: 'string', format: 'date-time' },
+                    updatedAt: { type: 'string', format: 'date-time' },
+                },
+            },
         }
     },
     // Apply Bearer auth globally, but you can remove this if you want only some certain routes protected

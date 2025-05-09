@@ -1,4 +1,5 @@
 const { validationResult } = require('express-validator')
+const ApiError = require('../errors/ApiError')
 
 /**
  * After running validation chains, call this to check for errors.
@@ -7,7 +8,7 @@ const { validationResult } = require('express-validator')
 function validate(req, res, next){
     const errors = validationResult(req)
     if(!errors.isEmpty()){
-        return res.status(400).json({ errors: errors.array()})
+        return next(ApiError.BadRequest('Validation failed,', errors.array()))
     }
 }
 

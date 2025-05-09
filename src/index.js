@@ -7,6 +7,7 @@ const app = express()
 const bookRoutes = require('./routes/bookRoutes')
 const authRoutes = require('./routes/authRoutes')
 const authMiddleware = require('./middleware/authMiddleware')
+const errorMiddleware = require('./middleware/errorMiddleware')
 
 
 app.use(express.json())
@@ -35,3 +36,4 @@ async function bootstrap(){
 }
 
 bootstrap()
+app.use(errorMiddleware)

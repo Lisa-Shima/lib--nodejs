@@ -1,5 +1,5 @@
 const AppDataSource = require('../config/data-source')
-
+const ApiError = require('../errors/ApiError')
 const BOOK_REPO = AppDataSource.getRepository('Book')
 
 // fetching all books
@@ -18,7 +18,7 @@ async function createBook(req, res, next){
     try{
         // const book = await BOOK_REPO.create(req.body)
         const { title, author } = req.body
-        if(!title || !author) return res.status(400).json({message: 'Both title and author are required'})
+        if(!title || !author) throw ApiError.BadRequest('Both title and author are required')
             const book = BOOK_REPO.create({title, author})
         const result = await BOOK_REPO.save(book)
         res.status(201).json(result)
@@ -33,7 +33,7 @@ async function updateBook(req, res, next){
     try{
         const bookId = parseInt(req.params.id)
         const { author, title } = req.body
-        if(!author || !title) return res.status(400).json({message: 'Both title and author are required'})
+        if(!author || !title) throw new ApiError.BadRequest('Both title and author are required')
             const book = await BOOK_REPO.findOneBy({id: bookId})
         if(!book) return res.status(404).json({message: 'Book not found'})
             book.author = author
@@ -52,7 +52,7 @@ async function deleteBook(req, res, next){
         const bookId = parseInt(req.params.id)
         const result = await BOOK_REPO.delete({id: bookId})
 
-        if(result.affected === 0) return res.status(404).json({message: 'Book not found'})
+        if(result.affected === 0) throw ApiError.NotFound('Book not found')
             res.status(200).json({message: 'Book deleted successfully'})
     }
     catch(e){

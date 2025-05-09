@@ -1,6 +1,7 @@
 const AppDataSource = require('../config/data-source')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const ApiError = require('../errors/ApiError')
 
 const USER_REPO = AppDataSource.getRepository('User')
 
@@ -13,10 +14,10 @@ const signToken = (payload) => {
 async function register(req, res, next){
     try{
         const { name, email, password } = req.body
-        if(!name || !email || !password) return res.status(400).json({message: 'All fields are required'})
+        if(!name || !email || !password) throw new ApiError.BadRequest('All fields are required')
         
         const exists = await USER_REPO.findOneBy({email})
-        if(exists) return res.status(400).json({message: 'User already exists'})
+        if(exists) throw new ApiError.BadRequest('Email already exists') // or ApiError.Conflict('Email already registered.') if you’d like a 409
 
         const hashed = await bcrypt.hash(password, 10)
         const user = USER_REPO.create({ name, email, password: hashed})
@@ -32,13 +33,13 @@ async function register(req, res, next){
 async function login(req, res, next){
     try{
         const { email, password} = req.body
-        if(!email || !password) return res.status(400).json({message: 'All fields are required'})
+        if(!email || !password) throw new ApiError.BadRequest('All fields are required')
 
         const exists = await USER_REPO.findOneBy({email})
-        if(!exists) return res.status(404).json({message: 'Invalid credentials'})
+        if(!exists) throw new ApiError.UnAuthorized('Invalid credentials')
         
         const match = await bcrypt.compare(password, exists.password)
-        if(!match) return res.status(401).json({message: 'Invalid credentials'})
+        if(!match) throw new ApiError.UnAuthorized('Invalid credentials')
 
         const token = signToken({id: exists.id, email: exists.email})
         res.status(200).json({token})
